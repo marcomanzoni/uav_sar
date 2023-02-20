@@ -17,13 +17,17 @@ addpath('./trajectories',...
 % and the info.txt file with infos about the experiment such as (PRF, PRI,
 % pulse length, bandwidth, central frequency, total trajectory lenth)
 
-experiment_folder              = "C:\Users\manzoni\Documents\data\exp1";
+experiment_folder              = "D:\Droni_Campaigns\20230208_monte_barro_auto_2\exp1";
+max_range = 300;
 
 % load the parameters of the radar (f0,PRI,PRF,BW,fs,gains and waveform)
 radar_parameters = loadRadarParameters(experiment_folder);
 
+% Convert raw data from .dat to .mat
+rawDataConvert(experiment_folder, radar_parameters.samples_waveform);
+
 % load the data itself
-raw_data = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range);
+ raw_data = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range);  
 
 
 

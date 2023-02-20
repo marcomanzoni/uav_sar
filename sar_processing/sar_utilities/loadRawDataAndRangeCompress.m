@@ -1,16 +1,16 @@
-function [raw_data, range_ax, tau_ax] = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range)
+function [raw_data, t_ax, tau_ax] = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range)
 %LOADRAWDATA Summary of this function goes here
 %   Detailed explanation goes here
 
-chirp_sr            = radar_parameters.fs;     % SDR sample rate
-chirp_bw            = .9*chirp_sr;                         % actual chirp bandwidth
+chirp_sr            = radar_parameters.fs;                  % SDR sample rate
+chirp_bw            = .9*chirp_sr;                          % actual chirp bandwidth
 
 tx_wave             = radar_parameters.TX_waveform;
 tx_wave             = single(tx_wave);
 samples_per_chirp   = radar_parameters.samples_waveform;            % 2^15 mew, 33002 for 30MSps(old)
 
 dt                  = 1/chirp_sr;
-dR                  = (physconst('LightSpeed') * dt)/2;
+dR                  = physconst('LightSpeed') * dt;
 samp_margin         = round(max_range / dR);
 
 %%%%%%%%%%%%%%%%%%%% Get the folder content %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,7 +69,7 @@ for slice_idx = 1:N_slice:size(A,2)
     %save the slice, appending to the end
     idxs = max_idx-samp_margin:max_idx + samp_margin;
 
-    if(idxs(1) <1)
+    if(idxs(1) < 1)
         RC_slice = circshift(RC_slice,-idxs(1) + 1, 1);
         idxs = idxs + (idxs(1) + 1);
     elseif (idxs(end) > size(RC_slice,1))
@@ -85,7 +85,11 @@ for slice_idx = 1:N_slice:size(A,2)
     m.Drc(:,slice_idx:slice_idx+N_slice-1) = RC_slice;
 end
 
-close("force";)
+close(f);
+
+tau_ax = 0:radar_parameters.PRI:size(A,2);
+t_ax = (-samp_margin/2:samp_margin/2)*dt;
+
 
 end
 
