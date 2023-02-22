@@ -27,7 +27,7 @@ radar_parameters = loadRadarParameters(experiment_folder);
 rawDataConvert(experiment_folder, radar_parameters.samples_waveform);
 
 % load the data itself
- raw_data = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range);  
+raw_data = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range);  
 
 % Trajectory interpolation
 
