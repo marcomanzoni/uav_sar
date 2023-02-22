@@ -8,7 +8,8 @@ addpath('./trajectories',...
     genpath('../utilities'),...
     addpath(genpath('../range_compression')));
 
-%% Experiment definition
+%% Definition of the parameters
+
 % Each experiment has a folder with the following sub-directories
 % raw: for raw data
 % rc: for range compressed data
@@ -18,18 +19,32 @@ addpath('./trajectories',...
 % pulse length, bandwidth, central frequency, total trajectory lenth)
 
 experiment_folder              = "D:\Droni_Campaigns\20230208_monte_barro_auto_2\exp1";
-max_range = 300;
+max_range                      = 300;
+OSF                            = 4;
+zero_doppler_notch             = true;
 
-% load the parameters of the radar (f0,PRI,PRF,BW,fs,gains and waveform)
+%% Start the processing
+
+% loading the parameters of the radar (f0,PRI,PRF,BW,fs,gains and waveform)
 radar_parameters = loadRadarParameters(experiment_folder);
 
 % Convert raw data from .dat to .mat
 rawDataConvert(experiment_folder, radar_parameters.samples_waveform);
 
 % load the data itself
-raw_data = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range);  
+[Drc, t_ax, tau_ax] = loadRawDataAndRangeCompress(experiment_folder, radar_parameters, max_range, OSF);  
 
-% Trajectory interpolation
+figure; plot(t_ax*3e8/2, mean(abs(Drc),2)); xlabel("range [m]"); ylabel("Amplitude");
+title("Resolution check from the direct path"); grid on;
+
+% Testing notch filter
+Drc = zeroDopplerNotch(Drc, radar_parameters.PRF);
+figure; imagesc(tau_ax, t_ax*3e8/2, db(Drc)); caxis([90,120]);
+xlabel("Slow time [s]");
+ylabel("range [m]");
+title("Notched zero doppler");
+
+% Trajectory interpolation to match the radar timestamps
 
 % Focusing
 

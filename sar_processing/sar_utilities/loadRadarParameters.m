@@ -1,4 +1,5 @@
 function radar_parameters = loadRadarParameters(experiment_folder)
+%loadRadarParameters: load the parameters of the radar
 
 if not(exist(experiment_folder, 'dir'))
     error("The experiment folder does not exist");
