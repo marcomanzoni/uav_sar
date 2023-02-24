@@ -39,12 +39,21 @@ title("Resolution check from the direct path"); grid on;
 
 % Testing notch filter
 Drc = zeroDopplerNotch(Drc, radar_parameters.PRF);
-figure; imagesc(tau_ax, t_ax*3e8/2, db(Drc)); caxis([90,120]);
+figure; imagesc(tau_ax, t_ax*3e8/2, db(Drc)); caxis([100,120]);
 xlabel("Slow time [s]");
 ylabel("range [m]");
 title("Notched zero doppler");
 
 % Trajectory interpolation to match the radar timestamps
+Nbegin = 4500;
+Nend = 64300;
+figure; imagesc([], t_ax*3e8/2, db(Drc)); caxis([100,120]); hold on;
+plot([Nbegin Nbegin],[t_ax(1)*3e8/2, t_ax(end)*3e8/2], 'r');
+plot([Nend Nend],[t_ax(1)*3e8/2, t_ax(end)*3e8/2], 'r');
+
+traj = loadTrajectories(experiment_folder);
+traj = alignTrajectoryWithRadarData(traj.lat, traj.lon, traj.alt, traj.speed, traj.time_stamp, ...
+    tau_ax, Nbegin, Nend);
 
 % Focusing
 
