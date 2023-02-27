@@ -12,7 +12,7 @@ plot(idx_end, speed(idx_end), 'rd'); title("Instantaneous NU Speed"); xlabel("Ti
 origin = [mean(lat(idx_start:idx_end)), mean(lon(idx_start:idx_end)), mean(alt(idx_start:idx_end))];
 [xEast, yNorth, zUp] = latlon2local(lat, lon, alt, origin); 
 
-% Compute again the speed ov the vehicle, the one on the navigator is
+% Compute again the speed of the vehicle, the one on the navigator is
 % wrong...
 dt = seconds(diff(time_stamp));
 dt = [dt(1); dt];
@@ -52,6 +52,7 @@ plot(Sx,Sy); axis tight;
 plot(Sx(idx_start), Sy(idx_start), 'gd');
 plot(Sx(idx_end), Sy(idx_end), 'rd');
 title("Trajectory");
+xlabel("x [m]"); ylabel("y [m]");
 legend("ENU", "Start", "End", "X-Aligned");
 
 % Start time of the trajectory
@@ -68,12 +69,24 @@ Sx = temp(:,1);
 Sy = temp(:,2);
 Sz = temp(:,3);
 
+nav_speed = interp1(time_stamp, speed, new_tau_ax, 'linear');
+
 traj.Sx = Sx;
 traj.Sy = Sy;
 traj.Sz = Sz;
+traj.speed = nav_speed;
 traj.tau_ax = new_tau_ax;
 traj.idx_start = Nbegin;
-traj.idx_end = Nend;
+traj.idx_end = Nend; 
+
+% 
+dt = mean(diff(tau_ax));
+Vx = gradient(Sx)./dt;
+Vy = gradient(Sy)./dt;
+Vz = gradient(Sz)./dt;
+new_speed = sqrt(Vx.^2 + Vy.^2 + Vz.^2);
+
+figure; plot(tau_ax, nav_speed); grid on;
 
 end
 

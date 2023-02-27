@@ -5,6 +5,7 @@ if not(exist(experiment_folder, 'dir'))
     error("The experiment folder does not exist");
 end
 
+c = physconst('lightspeed');
 
 radar_parameters.f0         = 1.65e9;
 radar_parameters.B          = 36e6;
@@ -12,8 +13,9 @@ radar_parameters.fs         = 40e6;
 radar_parameters.TX_gain    = 50; % dB
 radar_parameters.RX_gain    = 50; % dB
 
-c                           = physconst('lightspeed');
+
 radar_parameters.lambda     = c/radar_parameters.f0;
+radar_parameters.rho_rg     = c/2/radar_parameters.B;
 
 radar_parameters.TX_waveform        = load(fullfile(experiment_folder,"waveform/TX_waveform_S56M.mat")).s_pad;
 radar_parameters.samples_waveform   = length(radar_parameters.TX_waveform);
