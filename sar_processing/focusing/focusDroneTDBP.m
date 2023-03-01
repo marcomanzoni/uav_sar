@@ -43,12 +43,13 @@ ind = find(W(:) > tol);
 % STRIPMAP BACK PROJECTION
 Y_loc = Y(ind);
 I = zeros(size(X));
+scaling = zeros(size(X));
 
 WAITBAR = waitbar(0,'Backprojecting...');
 
 for tau = 1:Ntau
     waitbar(tau/Ntau,WAITBAR)
-    tau
+    
     % Index of samples to be backprojected
     delta_Sx = Sx(tau) - Sx(tau_ref);
     delta_x_camp = round(delta_Sx/dx);
@@ -75,7 +76,10 @@ for tau = 1:Ntau
     Itau = interp1(t_ax,Drc(:,tau),delay,'linear',0);
     Itau = W.*Itau.*exp(+1i*2*pi*f0*delay);
     I(ind_loc) = I(ind_loc) + Itau;
+    scaling(ind_loc) = scaling(ind_loc) + 1;
 end
+
+I = I./scaling;
 
 close(WAITBAR)
 

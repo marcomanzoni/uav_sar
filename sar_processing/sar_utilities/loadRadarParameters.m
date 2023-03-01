@@ -10,8 +10,8 @@ c = physconst('lightspeed');
 radar_parameters.f0         = 1.65e9;
 radar_parameters.B          = 36e6;
 radar_parameters.fs         = 40e6;
-radar_parameters.TX_gain    = 50; % dB
-radar_parameters.RX_gain    = 50; % dB
+radar_parameters.TX_gain    = 59; % dB
+radar_parameters.RX_gain    = 70; % dB
 
 
 radar_parameters.lambda     = c/radar_parameters.f0;

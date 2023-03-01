@@ -7,9 +7,14 @@ if rem(USF,2) ~= 1
     USF = USF - 1;
 end
 
+
+b = fir1(50,2/USF,"low");
+b = b./sqrt(b*b');
+Drc = filter(b, 1,Drc, [], 2);
+
 % For the moment is a moving average, later on we will make this more
 % sophisticate
-Drc = movmean(Drc,USF,2);
+%Drc = movmean(Drc,USF,2);
 Drc = Drc(:, 1:USF:end);
 
 % It changes also the PRF

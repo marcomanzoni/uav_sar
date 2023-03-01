@@ -1,5 +1,5 @@
 mainFolder = "D:\Droni_Campaigns\20230208_monte_barro_auto_2";
-experimentName = "exp1";
+experimentName = "exp12";
 
 folderName = fullfile(mainFolder, experimentName);
 
@@ -13,3 +13,4 @@ mkdir(fullfile(folderName, "raw"));
 mkdir(fullfile(folderName, "rc"));
 mkdir(fullfile(folderName, "images"));
 mkdir(fullfile(folderName, "trajectories"));
+mkdir(fullfile(folderName, "waveform"));
