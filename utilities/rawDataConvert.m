@@ -1,6 +1,17 @@
 function rawDataConvert(experiment_folder, samplesPerChirp)
-%RAWDATACONVERT Summary of this function goes here
-%   Detailed explanation goes here
+%RAWDATACONVERT Convert the raw data from .dat to .mat
+% Notice that the operation of saving may take a while since the MAT files
+% are very slow. If the function finds a .mat file in the RAW sub-folder of
+% the project it continues without converting the raw data. In this case it
+% also throw a warning message.
+%
+% Inputs:
+%       experiment_folder: a string containing the experiment folder. See the script
+%                           generateProjectFolder.m for the structure of
+%                           this folder
+%       samplesPerChirp: number of samples of the transmitted waveform
+%
+
 
 directoryContent = dir(fullfile(experiment_folder,"raw","*.mat"));
 if length(directoryContent) > 0

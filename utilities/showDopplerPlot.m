@@ -1,6 +1,16 @@
 function [S,f_ax] = showDopplerPlot(Drc, PRF)
-%SHOWDOPPLERPLOT Summary of this function goes here
-%   Detailed explanation goes here
+%SHOWDOPPLERPLOT Compute the Doppler spectrum of the data
+%
+% Inputs:
+%       Drc: range compressed data matrix. Fast time along the rows,
+%                       slow-time along the columns.
+%       PRF: Pulse Repetition Frequency
+%   
+%
+% Outputs:
+%       S: doppler spectrum computed for each range along slow-time
+%       f_ax: axis for the Doppler Frequecy domain.
+%
 
 [Nrg, Naz] = size(Drc);
 

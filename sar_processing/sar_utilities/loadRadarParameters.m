@@ -1,5 +1,28 @@
 function radar_parameters = loadRadarParameters(experiment_folder)
-%loadRadarParameters: load the parameters of the radar
+%loadRadarParameters.m loads the radar parameters into a structure
+%
+% Inputs:
+%       experiment_folder: a string containing the experiment folder. See the script
+%                           generateProjectFolder.m for the structure of
+%                           this folder
+%
+% Outputs:
+%       radar_parameters: a structure containing the following values
+%       radar_parameters.f0: central frequency
+%       radar_parameters.lambda: wavelength
+%       radar_parameters.rho_rg: slant range resolution given by the
+%       bandwidth
+%       radar_parameters.B: bandwidth
+%       radar_parameters.fs: sampling frequency in fast time
+%       radar_parameters.TX_gain: TX gain
+%       radar_parameters.RX_gain: RX gain
+%       radar_parameters.TX_waveform: an array with the transmitte waveform
+%       radar_parameters.samples_waveform: the number of samples of the
+%       transmitted waveform
+%       radar_parameters.PRI: Pulse Repetition Interval
+%       radar_parameters.PRF: Pulse Repetition Frequency
+
+
 
 if not(exist(experiment_folder, 'dir'))
     error("The experiment folder does not exist");
