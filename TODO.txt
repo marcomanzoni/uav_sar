@@ -1,3 +1,5 @@
 1. Implement the TDBP in bistatic mode
 2. Implement the routine that writes a info.txt file containing all the acquisition informations such as:
 	PRF,PRI,pulse length, TX gain, RX gain, mode (mono/bist),bandwidth, range samples, azimuth samples, trajectory length, mean velocity of the platform, mean altitude of the platform
+3. Implement the saving of all the data in HDF5 file format which is much more flexible and fast than the MAT file format.
+4. Function that exports the trajectory into a KML
