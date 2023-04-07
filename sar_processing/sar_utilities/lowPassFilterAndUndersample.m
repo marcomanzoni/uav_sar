@@ -22,9 +22,10 @@ if rem(USF,2) ~= 1
 end
 
 
-b = fir1(50,2/USF,"low");
+b = fir1(4*USF,1/USF,"low");
 b = b./sqrt(b*b');
-Drc = filter(b, 1,Drc, [], 2);
+%Drc = filter(b, 1,Drc, [], 2);
+Drc = conv2(Drc, b, "same");
 
 % For the moment is a moving average, later on we will make this more
 % sophisticate

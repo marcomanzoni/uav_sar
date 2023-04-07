@@ -14,7 +14,7 @@ function Drc = filterRange(Drc, t_ax, B)
 %                       slow-time along the columns.
 %
 
-c = physconst('lightspeed');
+c       = physconst('lightspeed');
 r_ax    = t_ax*c/2;
 dr      = r_ax(2)-r_ax(1);
 rhoR    = c/2/B;
