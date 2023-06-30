@@ -1,4 +1,10 @@
 function traj = loadTrajectories(experiment_folder)
+%loadTrajectories.m loads the trajectories in .mat file coming from the
+%matlab smartphone app.
+% Inputs:
+%       experiment_folder: a string containing the experiment folder. See the script
+%                           generateProjectFolder.m for the structure of
+%                           this folder
 
 dirContent = dir(fullfile(experiment_folder,"trajectories","sensorlog*.mat"));
 if length(dirContent) ~= 1

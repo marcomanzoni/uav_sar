@@ -1,6 +1,21 @@
 function I = focusDroneTDBP(Drc, t_ax, f0, Sx, Sy, Sz, X,Y,Z, rho_az, squint)
-%FOCUSDRONETDBP Summary of this function goes here
-%   Detailed explanation goes here
+%FOCUSDRONETDBP loads the raw data and range compress it.
+% If the script finds data that is alreay range compressed in the RC
+% folder, it will just load it without doing again the compression.
+%
+% Inputs:
+%       Drc:            range compressed data matrix. Fast time along the rows,
+%                       slow-time along the columns.
+%       t_ax:           fast time axis
+%       f0:             carrier frequency
+%       Sx,Sy,Sz:        Three vectors containing the trajectories for each
+%                       slow time
+%       X,Y,Z:           Backprojection grid
+%       rho_az:          Desired azimuth resolution
+%       squint:         squint used for the focusing
+%
+% Outputs:
+%       I:         SAR image
 
 % Axes, size, and physical constant
 c       = physconst('LightSpeed');
@@ -37,10 +52,8 @@ ind = find(W(:) > tol);
 
 % Indexes of pixels for which the weighting function is > 0
 [Yc_ref,Xc_ref] = ind2sub([Ny Nx],ind); 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% STRIPMAP BACK PROJECTION
+
 Y_loc = Y(ind);
 I = zeros(size(X));
 scaling = zeros(size(X));

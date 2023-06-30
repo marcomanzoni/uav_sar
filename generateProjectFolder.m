@@ -1,5 +1,5 @@
-mainFolder = "D:\Droni_Campaigns\20230208_monte_barro_auto_2";
-experimentName = "exp12";
+mainFolder = "D:\Droni_Campaigns\20230331_giuriati_2";
+experimentName = "exp15";
 
 folderName = fullfile(mainFolder, experimentName);
 

@@ -1,6 +1,30 @@
 function traj = alignTrajectoryWithRadarData(lat, lon, alt, speed, time_stamp, tau_ax, Nbegin, Nend)
-%ALIGNTRAJECTORYWITHRADARDATA Summary of this function goes here
-%   Detailed explanation goes here
+%ALIGNTRAJECTORYWITHRADARDATA Align the trajectory with radar data, convert
+%it it local coordinates and align the trajectory with x.
+%
+% Inputs:
+%       lat:            vector with the latitude coordinates of the trajectory
+%       lon:            vector with the longitude coordinates of the trajectory
+%       alt:            vector with the altitude coordinates of the trajectory
+%       speed :         vector with the instantaneous speed of the trajectory
+%       time_stamp:     time stamp of the navigation unit
+%       tau_ax:         radar slow time axis
+%       Nbegin:         slow-time samples at which the platform starts to
+%                       move. This sample will be aligned with the first sample of the
+%                       trajectory with non-zero speed.
+%       Nbegin:         slow-time samples at which the platform stops
+%
+% Outputs:
+%       traj:       structure containing the following paramterers
+%       traj.Sx:    x position (along track)
+%       traj.Sy     y position
+%       traj.Sz     z position
+%       traj.speed  instantaneous speed
+%       traj.tau_ax slow-time in UTC
+%       traj.Nbegin same as input
+%       traj.Nend   same as input
+
+
 
 % Convert from lat lon to local coordinates w.r.t
 idx_start = find(speed~=0, 1, 'first');
@@ -80,13 +104,13 @@ traj.idx_start = Nbegin;
 traj.idx_end = Nend; 
 
 % 
-dt = mean(diff(tau_ax));
-Vx = gradient(Sx)./dt;
-Vy = gradient(Sy)./dt;
-Vz = gradient(Sz)./dt;
-new_speed = sqrt(Vx.^2 + Vy.^2 + Vz.^2);
-
-figure; plot(tau_ax, nav_speed); grid on;
+% dt = mean(diff(tau_ax));
+% Vx = gradient(Sx)./dt;
+% Vy = gradient(Sy)./dt;
+% Vz = gradient(Sz)./dt;
+% new_speed = sqrt(Vx.^2 + Vy.^2 + Vz.^2);
+% 
+% figure; plot(tau_ax, nav_speed); grid on;
 
 end
 
