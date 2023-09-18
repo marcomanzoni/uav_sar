@@ -7,14 +7,20 @@ c = physconst('lightSpeed'); % [m/s]
 K = physconst('boltzmann'); % [J/K]
 F_dB = 5.542; % figura di rumore
 
-if 0 % 10.5 500 mW eirp
+if 1 % 10.5 500 mW eirp
      f0 = 10.5e9;  % [Hz]
      P_tx_dBm = 15.9 % max = 17.5
      B = 100e6; % [Hz]
-else  % 9.7 25 mW eirp
+end
+if 0  % 9.7 25 mW eirp
      f0 = 9.7e9;  % [Hz]
      P_tx_dBm = 2.8 % max = 17.5
      B = 400e6; % [Hz]
+end
+if 0
+    f0 = 5.9e9;
+    P_tx_dBm = 20;
+    B = 40e6;
 end
 
 T_ref = 290; % [K]
@@ -23,7 +29,7 @@ delta_psi_deg = 60;
 delta_teta_deg = 40;
 teta_pt_deg = 90;
 ant_eff = 0.75;
-PRF = 1e3; % [Hz]
+PRF = 125e3;%1e3; % [Hz]
 duty_cycle = 1;
 R_max = 4000;
 R_min = H_ref;
@@ -36,11 +42,11 @@ Nb = 12; % bit per campionare il battimento
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PARAMETRI DERIVATI
 % res range
-pho_r = c/2/B; % [m]
+pho_r       = c/2/B; % [m]
 
 % Antenna
-delta_psi = delta_psi_deg*pi/180;
-delta_teta = delta_teta_deg*pi/180;
+delta_psi   = delta_psi_deg*pi/180;
+delta_teta  = delta_teta_deg*pi/180;
 teta_pt = teta_pt_deg*pi/180;
 Lh = lambda/delta_psi;
 Lv = lambda/delta_teta;
