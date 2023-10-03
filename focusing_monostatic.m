@@ -2,10 +2,9 @@ clear all;
 close all;
 clc;
 
-load("C:\Users\manzoni\Desktop\dati strani\\DRC.mat");
+load("C:\Users\Manzoni\Desktop\dati strani\\DRC.mat");
 
 c = physconst('lightspeed');
-
 
 %% Let's have a look at the trajectory
 
