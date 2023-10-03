@@ -193,8 +193,8 @@ Ntau = length(Sx_traj_pres)
 
 f0 = radar_parameters.f0;
 
-x_ax = -600 : radar_parameters.rho_rg*0.01 : 600;
-y_ax = 50 : radar_parameters.rho_rg*0.01 : 1200;
+x_ax = -600 : radar_parameters.rho_rg*0.5 : 600;
+y_ax = 50 : radar_parameters.rho_rg*0.5 : 1200;
 
 [X,Y] = meshgrid(x_ax, y_ax);
 Z = 0*X;
