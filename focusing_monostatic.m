@@ -85,8 +85,9 @@ r_ax            = c/2*t_ax;
 
 % removing sidelobes in range with a gaussian filter
 dr              = mean(diff(r_ax));
-filter_ax       = -5*rho_rg : dr : 5*rho_rg;
-range_filter    = exp(-1/2*(filter_ax./rho_rg).^2);
+filter_ax       = -10*rho_rg : dr : 10*rho_rg;
+filtering_strength = rho_rg;
+range_filter    = exp(-1/2*(filter_ax./filtering_strength).^2);
 range_filter    = range_filter./sqrt(sum(range_filter.^2));
 
 D_range_rem     = conv2(D, range_filter(:), 'same');
