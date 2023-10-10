@@ -3,18 +3,19 @@ close all;
 clc;
 
 load("C:\Users\Manzoni\Desktop\dati strani\\DRC.mat");
+load("C:\Users\manzoni\Desktop\dati strani\dati_strani.mat");
 
 c = physconst('lightspeed');
 
 %% Let's have a look at the trajectory
 
-load("C:\Users\manzoni\Desktop\dati strani\dati_strani.mat");
+
 dtau = mean(diff(tau_ax));
 rho_rg = radar_parameters.rho_rg;
 
 % I want the movement to be along x
-beginTraj   = 0.05e4;
-endTraj     = 4.3e4;
+beginTraj   = 2.7e4 %3.5e4;%
+endTraj     = 3.5e4 %4.3e4; %
 
 window_filter = 3501;
 
@@ -47,7 +48,7 @@ DSx = gradient(Sx)/dtau;
 DSx = movmedian(DSx, 2*window_filter);
 
 DSy = gradient(Sy)/dtau;
-DSy = movmedian(DSy, 2*window_filter);
+DSy = movmedian(DSy, 2*window_filter); 
 
 DSz = gradient(Sz)/dtau;
 DSz = movmedian(DSz, 2*window_filter);
@@ -68,11 +69,11 @@ beta = atan2d(Sy(endTraj)-Sy(beginTraj),Sx(endTraj)-Sx(beginTraj));
 
 H = [cosd(beta) sind(beta); -sind(beta) cosd(beta)];
 
-P = H*[Sx' ; Sy'];
-Sx = P(1,:)';
-Sy = P(2,:)';
-Sy = Sy - mean(Sy(beginTraj:endTraj));
-Sx = Sx - mean(Sx(beginTraj:endTraj));
+% P = H*[Sx' ; Sy'];
+% Sx = P(1,:)';
+% Sy = P(2,:)';
+% Sy = Sy - mean(Sy(beginTraj:endTraj));
+% Sx = Sx - mean(Sx(beginTraj:endTraj));
 
 figure;
 plot3(Sx,Sy,Sz); grid on; axis equal; xlabel("X [m]"); ylabel("Y [m]"); zlabel("Z [m]"); hold on;
@@ -189,12 +190,16 @@ Sx_traj_pres          = Sx_pres(floor(beginTraj/pres_win) : floor(endTraj/pres_w
 Sy_traj_pres          = Sy_pres(floor(beginTraj/pres_win) : floor(endTraj/pres_win));
 Sz_traj_pres          = Sz_pres(floor(beginTraj/pres_win) : floor(endTraj/pres_win));
 
+tau_ax_apertura = tau_ax(floor(beginTraj/pres_win) : floor(endTraj/pres_win));
+tau_ax_apertura = tau_ax_apertura - mean(tau_ax_apertura);
+err_vel = 0 * tau_ax_apertura;
+
 Ntau = length(Sx_traj_pres)
 
 f0 = radar_parameters.f0;
 
-x_ax = -600 : radar_parameters.rho_rg*0.01 : 600;
-y_ax = 50 : radar_parameters.rho_rg*0.01 : 1200;
+x_ax = -600 : radar_parameters.rho_rg*0.5 : 600;
+y_ax = 50 : radar_parameters.rho_rg*0.5 : 1200;
 
 [X,Y] = meshgrid(x_ax, y_ax);
 Z = 0*X;
@@ -205,7 +210,7 @@ for ii = 1:Ntau
 
     fprintf("Focussing %d / %d: ", ii, Ntau);
     delta_x = Sx_traj_pres(ii)-X;
-    delta_y = Sy_traj_pres(ii)-Y;
+    delta_y = (Sy_traj_pres(ii)+err_vel(ii))-Y;
     delta_z = Sz_traj_pres(ii)-Z;
 
     distances = sqrt(delta_x.^2+delta_y.^2+delta_z.^2);
@@ -233,37 +238,37 @@ colormap("jet");
 
 
 %% Let's try some dirty autofocus tricks
-
-[pks,locs_y,locs_x]=peaks2(abs(I./Inorm),'MinPeakDistance',5*rho_rg, 'MinPeakHeight',0.5);
-
-
-figure; imagesc(x_ax, y_ax, abs(I./Inorm)); axis xy equal tight
-colormap("jet"); hold on;
-
-
-x_gcp = x_ax(locs_x);
-y_gcp = y_ax(locs_y);
-
-plot(x_gcp, y_gcp, 'md');
-
-for ii = 1:Ntau
-
-    fprintf("Focussing %d / %d: ", ii, Ntau);
-
-    delta_x = Sx_traj_pres(ii)-x_gcp;
-    delta_y = Sy_traj_pres(ii)-y_gcp;
-    delta_z = Sz_traj_pres(ii)-z_gcp;
-
-    distances = sqrt(delta_x.^2+delta_y.^2+delta_z.^2);
-
-    delay = 2*distances/c;
-
-    %I = I + interp1(t_ax, D_traj_pres(:,ii).*r_ax', delay, "linear",NaN).*exp(+1j*2*pi*f0*delay);
-    Inorm = Inorm + interp1(t_ax, abs(D_traj_pres(:,ii)), delay, "linear",NaN);
-    I = I + interp1(t_ax, D_traj_pres(:,ii), delay, "linear",NaN).*exp(+1j*2*pi*f0*delay);
-
-    fprintf("Done. \n");
-end
+% 
+% [pks,locs_y,locs_x]=peaks2(abs(I./Inorm),'MinPeakDistance',5*rho_rg, 'MinPeakHeight',0.5);
+% 
+% 
+% figure; imagesc(x_ax, y_ax, abs(I./Inorm)); axis xy equal tight
+% colormap("jet"); hold on;
+% 
+% 
+% x_gcp = x_ax(locs_x);
+% y_gcp = y_ax(locs_y);
+% 
+% plot(x_gcp, y_gcp, 'md');
+% 
+% for ii = 1:Ntau
+% 
+%     fprintf("Focussing %d / %d: ", ii, Ntau);
+% 
+%     delta_x = Sx_traj_pres(ii)-x_gcp;
+%     delta_y = Sy_traj_pres(ii)-y_gcp;
+%     delta_z = Sz_traj_pres(ii)-z_gcp;
+% 
+%     distances = sqrt(delta_x.^2+delta_y.^2+delta_z.^2);
+% 
+%     delay = 2*distances/c;
+% 
+%     %I = I + interp1(t_ax, D_traj_pres(:,ii).*r_ax', delay, "linear",NaN).*exp(+1j*2*pi*f0*delay);
+%     Inorm = Inorm + interp1(t_ax, abs(D_traj_pres(:,ii)), delay, "linear",NaN);
+%     I = I + interp1(t_ax, D_traj_pres(:,ii), delay, "linear",NaN).*exp(+1j*2*pi*f0*delay);
+% 
+%     fprintf("Done. \n");
+% end
 
 
 
